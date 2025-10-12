@@ -32,15 +32,23 @@ class ImportPostalCodes extends Command
         $this->info('Importing data...');
         $bar = $this->output->createProgressBar(count($rows));
 
+        $skipped = 0;
+
         foreach ($rows as $row) {
             $postalCode = $row[0];
             $cityName = $row[1];
             $countyName = $row[2];
 
-            $county = County::firstOrCreate(['name' => $countyName]);
+            if (empty($postalCode) || empty($cityName) || empty($countyName)) {
+                $skipped++;
+                $bar->advance();
+                continue;
+            }
+
+            $county = County::firstOrCreate(['name' => trim($countyName)]);
 
             $city = City::firstOrCreate(
-                ['name' => $cityName, 'county_id' => $county->id]
+                ['name' => trim($cityName), 'county_id' => $county->id]
             );
 
             PostalCode::firstOrCreate(
@@ -54,6 +62,10 @@ class ImportPostalCodes extends Command
         $bar->finish();
         $this->newLine();
         $this->info('Import completed successfully!');
+        
+        if ($skipped > 0) {
+            $this->warn("Skipped {$skipped} rows due to missing data.");
+        }
 
         return 0;
     }

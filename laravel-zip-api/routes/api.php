@@ -12,6 +12,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/counties', [CountyController::class, 'index']);
 Route::get('/counties/{county}', [CountyController::class, 'show']);
 
+Route::get('/search', [App\Http\Controllers\Api\SearchController::class, 'search']);
+
 Route::get('/cities', [CityController::class, 'index']);
 Route::get('/cities/{city}', [CityController::class, 'show']);
 

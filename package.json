@@ -1,13 +1,46 @@
 {
     "$schema": "https://json.schemastore.org/package.json",
+    "name": "laravel-zip-api",
+    "version": "1.0.0",
+    "description": "Laravel REST API for Hungarian postal codes, cities and counties",
     "private": true,
     "type": "module",
+    "main": "vite.config.js",
     "scripts": {
+        "dev": "vite",
         "build": "vite build",
-        "dev": "vite"
+        "apidoc": "apidoc -i app/Http/Controllers/Api -o public/apidoc"
     },
+    "apidoc": {
+        "title": "Laravel ZIP API Documentation",
+        "description": "RESTful API for Hungarian postal codes, cities and counties management",
+        "version": "1.0.0",
+        "url": "http://localhost:8000/api"
+    },
+    "directories": {
+        "test": "tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gczyb/laravel-zip-api.git"
+    },
+    "keywords": [
+        "laravel",
+        "api",
+        "rest",
+        "postal-codes",
+        "hungary",
+        "iranyitoszam"
+    ],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/gczyb/laravel-zip-api/issues"
+    },
+    "homepage": "https://github.com/gczyb/laravel-zip-api#readme",
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
+        "apidoc": "^1.2.0",
         "axios": "^1.11.0",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^2.0.0",

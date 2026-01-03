@@ -96,17 +96,29 @@ class CityController extends Controller
 
     public function destroy(City $city)
     {
-        /**
-         * @api {delete} /api/cities/:id Delete city
-         * @apiName DeleteCity
-         * @apiGroup City
-         *
-         * @apiParam {Number} id City unique ID.
-         *
-         * @apiSuccess {String} message Success message.
-         */
         $city->delete();
 
         return response()->json(['message' => 'City deleted successfully']);
+    }
+
+    public function getFirstLetters($countyId)
+    {
+        $letters = City::where('county_id', $countyId)
+            ->selectRaw('DISTINCT UPPER(SUBSTRING(name, 1, 1)) as letter')
+            ->orderBy('letter')
+            ->pluck('letter');
+
+        return response()->json($letters);
+    }
+
+    public function getCitiesByLetter($countyId, $letter)
+    {
+        $cities = City::with(['county', 'postalCodes'])
+            ->where('county_id', $countyId)
+            ->whereRaw('UPPER(SUBSTRING(name, 1, 1)) = ?', [strtoupper($letter)])
+            ->orderBy('name')
+            ->get();
+
+        return response()->json($cities);
     }
 }

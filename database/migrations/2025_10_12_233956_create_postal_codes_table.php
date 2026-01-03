@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('postal_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 4)->unique();
+            $table->string('code');
             $table->foreignId('city_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

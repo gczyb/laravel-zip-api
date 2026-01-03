@@ -35,9 +35,12 @@ class ImportPostalCodes extends Command
         $skipped = 0;
 
         foreach ($rows as $row) {
-            $postalCode = $row[0];
+            $postalCodeRaw = $row[0];
             $cityName = $row[1];
             $countyName = $row[2];
+
+            // 1. Javítás: .0 levágása
+            $postalCode = $postalCodeRaw ? (string)(int)$postalCodeRaw : null;
 
             if (empty($postalCode) || empty($cityName) || empty($countyName)) {
                 $skipped++;
@@ -51,10 +54,13 @@ class ImportPostalCodes extends Command
                 ['name' => trim($cityName), 'county_id' => $county->id]
             );
 
-            PostalCode::firstOrCreate(
-                ['code' => str_pad($postalCode, 4, '0', STR_PAD_LEFT)],
-                ['city_id' => $city->id]
-            );
+            // 2. FŐ JAVÍTÁS:
+            // A keresési tömbbe (első paraméter) beletesszük a city_id-t is!
+            // Így a 3837 létrejön külön Alsógagynál ÉS külön Csenyéténél is.
+            PostalCode::firstOrCreate([
+                'code' => str_pad($postalCode, 4, '0', STR_PAD_LEFT),
+                'city_id' => $city->id
+            ]);
 
             $bar->advance();
         }

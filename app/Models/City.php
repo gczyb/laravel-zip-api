@@ -8,11 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class City extends Model
 {
     use HasFactory;
-
-    // EZ A RÉSZ HIÁNYOZHAT VAGY HIÁNYOS:
     protected $fillable = [
         'name',
-        'county_id'
+        'county_id',
     ];
 
     public function county()

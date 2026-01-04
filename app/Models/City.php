@@ -9,7 +9,11 @@ class City extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'county_id'];
+    // EZ A RÉSZ HIÁNYOZHAT VAGY HIÁNYOS:
+    protected $fillable = [
+        'name',
+        'county_id'
+    ];
 
     public function county()
     {

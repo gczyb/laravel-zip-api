@@ -71,22 +71,10 @@ class CityController extends Controller
 
     public function update(Request $request, City $city)
     {
-        /**
-         * @api {put} /api/cities/:id Update city
-         * @apiName UpdateCity
-         * @apiGroup City
-         *
-         * @apiParam {Number} id City unique ID.
-         * @apiParam {String} name City name.
-         * @apiParam {Number} county_id Existing county id.
-         *
-         * @apiSuccess {Number} id City id.
-         * @apiSuccess {String} name Updated city name.
-         * @apiSuccess {Object} county Parent county.
-         */
         $request->validate([
-            'name' => 'required|string',
-            'county_id' => 'required|exists:counties,id'
+            // A 'sometimes' miatt csak akkor ellenőrzi, ha benne van a kérésben
+            'name' => 'sometimes|required|string',
+            'county_id' => 'sometimes|required|exists:counties,id'
         ]);
 
         $city->update($request->all());

@@ -10,14 +10,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // 1. Töröljük a meglévő felhasználókat, hogy ne legyen duplikáció
         User::truncate();
 
-        // 2. Létrehozzuk az Admint
         User::create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
-            'password' => Hash::make('password'), // Biztosan jó titkosítás
+            'password' => Hash::make('password'),
         ]);
         
         $this->command->info('Admin felhasználó létrehozva!');

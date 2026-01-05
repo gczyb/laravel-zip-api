@@ -45,38 +45,27 @@ class CityController extends Controller
 
     public function update(Request $request, $id)
     {
-        // 1. Megkeressük a várost
         $city = City::find($id);
-
+        
         if (!$city) {
             return response()->json(['message' => 'City not found'], 404);
         }
 
-        // 2. Validálás
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
                 'county_id' => 'sometimes|required|exists:counties,id'
             ]);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Validációs hiba: ' . $e->getMessage()], 422);
-        }
-
-        // 3. MENTÉS (Itt van a "csapda")
-        try {
-            // Megpróbáljuk frissíteni
-            $city->update($request->only(['name', 'county_id']));
             
-            // Ha sikerült, visszaküldjük
+            $city->update($validated);
+
             return new CityResource($city->load(['county', 'postalCodes']));
 
         } catch (\Exception $e) {
-            // HA HIBA VAN: Visszaküldjük a pontos hibaüzenetet a Frontendnek!
+            \Log::error('Mentési hiba: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Szerver hiba történt a mentéskor!',
-                'error_details' => $e->getMessage(), // Itt lesz a lényeg!
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
+                'error_details' => $e->getMessage()
             ], 500);
         }
     }

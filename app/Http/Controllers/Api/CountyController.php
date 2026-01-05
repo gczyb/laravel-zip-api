@@ -34,10 +34,8 @@ class CountyController extends Controller
 
         $request->validate(['name' => 'required|string|max:255']);
         
-        // Frissítés (ehhez kell a Modelben a $fillable!)
         $county->update($request->all());
         
-        // FONTOS: Visszaküldjük a frissített adatot, hogy a Frontend lássa a sikert
         return response()->json(['data' => $county]);
     }
 
@@ -46,7 +44,6 @@ class CountyController extends Controller
         $county = County::find($id);
         if (!$county) return response()->json(['message' => 'Not found'], 404);
 
-        // VÉDELEM: Ha van hozzárendelt város, ne engedjük törölni!
         if ($county->cities()->exists()) {
             return response()->json(['message' => 'Nem törölhető: A megyéhez városok tartoznak!'], 400);
         }
